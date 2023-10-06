@@ -3,28 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="./index.css" />
     <title>Document</title>
   </head>
   <body>
-    <div id="root"></div>
-
-    <!-- this file react.development.js is the core of React -->
-    <script
-      crossorigin
-      src="https://unpkg.com/react@18/umd/react.development.js"
-    ></script>
-
-    <!-- React library useful for DOM operations -->
-    <script
-      crossorigin
-      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
-    ></script>
-
-    <!-- we have 2 separate cdn links for react and react-dom because react not only works in browsers but also in mobile phones (react native).  -->
-    <!-- There are different DOM methods for react and react native. -->
-
-    <script src="./app.js"></script>
-
+    <div id="root">
+      <h1>Not Rendered</h1>
+    </div>
+    <script type="module" src="./src/app.js"></script>
   </body>
 </html>

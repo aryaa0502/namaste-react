@@ -1,1 +1,578 @@
-Notes for ep1 in the notebook. 
+26 Sept 6pm 
+STARTED NAMASTE REACT COURSE
+
+this file react.development.js is the core of React
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+
+    React library useful for DOM operations
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+
+    we have 2 separate cdn links for react and react-dom because react not only works in browsers but also in mobile phones (react native). 
+    There are different DOM methods for react and react native.
+
+creating single h1 tag
+const heading = React.createElement("h1", {id: "heading"}, "Hello World From React");
+console.log(heading);
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(heading);
+
+creating nested html elements
+const parent = React.createElement("div", { id: "parent" }, React.createElement("div", { id: "child" }, React.createElement("h1", {}, "I'm an h1 tag!")));
+console.log(parent);
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(parent);
+
+creating sibling elements
+
+import React from "react";
+import ReactDOM from "react-dom/client";
+const parent = React.createElement(
+  "div",
+  { id: "parent" },
+  React.createElement(
+    "div",
+    { id: "child" }, 
+    [React.createElement("h1", {}, "I'm an h1 tag!"), React.createElement("h2", {}, "I'm an h2 tag!")]
+  )
+);
+console.log(parent);
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(parent);
+
+ep1 code above
+
+Notes for ep1, ep2 in the notebook. 
+26 SEP EP 1
+28 SEPT EP 2
+
+
+
+
+
+
+EPISODE 3: laying the foundation (29 Sep)
+
+Using parcel to ignite our app - npx parcel index.html
+npx means executing a package
+npm means installing a package
+
+Another way to inject react into our app is via npm....1st way was to use cdn links
+cdn link is not a preffered way to bring react into our app because it makes a network call to unpkg.com which might be slow because of possible network latency.
+A better way is to use npm, so that react code is present locally in the node_modules folder
+
+For starting our project in development mode we used the command npx parcel index.html. And for buildng our project for production mode, we used
+npx parcel build index.html.
+We can define scripts in package.json file to start and build our project instead of writing above commands every time. For dev mode 
+and prod mode respectively, 
+"start": "parcel index.html",
+"build": "parcel build index.html",
+And now for dev mode, we can start proj by writing: npm run start/ npm start
+And for prod mode, we can build proj by writing: npm run build. npm build won't work.
+
+JSX is not HTML inside JavaScript. JSX is HTML-like or XML-like syntax.
+JS engine does not understand JSX. It understands pure JavaScript.
+JSX is transpiled by parcel before it goes into the js engine. Transpile means code is converted into something js engine can understand.
+Parcel gives the responsibility of transpilation to a package known as Babel. 
+Babel pkg comes bundled with parcel package. Babel is a free and open-source JavaScript transcompiler that is mainly used to convert 
+ECMAScript 2015+ code into backwards-compatible JavaScript code that can be run by older JavaScript engines. 
+It allows web developers to take advantage of the newest features of the language.
+Babel does this with jsx :- jsx => React.createElement => js object => root.render(element) => html
+Example code for what Babel does to JSX code:
+jsx => const heading = <h1 id="heading" > hello </h1>
+babel converts it into => const heading = /*#__PURE__*/ React.createElement("h1", { id: "heading }, "hello");
+
+For giving attributes in jsx elements, we need to use camelCase for attribute names.
+
+While writing multi-line jsx, we need to wrap it inside parentheses. Because Babel needs to know the start and end of jsx syntax.
+ep3 => 59:00 => vscode extensions instructor uses
+
+React Components:
+1. Class Based Components - OLD
+2. Functional Components - NEW
+
+React functional components are simple js functions. Name of functional component should be capitalized. 
+A function with capitalized name which returns jsx element is a functional component.
+
+React Functional Component = Function that returns React Elememnt i.e., JSX
+Component Composition is components nested inside component
+
+Within JSX code if you put {}, inside {} you can write pure js expression
+
+JSX prevents cross-site scripting attacks too.
+const data = api.getData(); => if this api sends malicious data
+const HeadingComponent = () => (
+    <div>
+      {data} => browser could execute this malicious js code
+    </div>
+)
+but JSX prevents it.
+
+<Title /> == <Title></Title> == {Title()} => different ways to use a functional component
+
+
+
+
+
+
+
+EPISODE 4: Talk is cheap, show me the code (29 Sep)
+
+When you are asked to build an app, you need wireframing, ui mockups
+
+1. give your app a name
+2. basic layout planning
+   a. header with a logo on left side, links on the right side
+   b. body
+       i. a search bar
+       ii. cards with image, other info
+   c. footer with copyright, contact and back to top links
+3. basic components to be built with code
+   a. header, body, footer component
+   b. header - logo, nav items
+   c. body - search input, cards
+   d. card - restaurant
+   e. footer - copyright
+
+=> inline style to jsx can be given using js objects and not by the normal inline style syntax that html accepts
+=> passing props to a functional component is just like passing arguments to a function
+=> when you have to pass dynamic data to a component, you pass it in through props object
+
+How to Use Array Destructuring to Assign the Rest of an Array Literal to a Variable?
+JavaScript allows you to use the "rest" operator within a destructuring array to assign the rest of a regular array to a variable.
+Here’s an example:
+const [firstName, ...otherInfo] = ["Oluwatobi", "Sofela", "codesweetly.com"];
+console.log(firstName); // "Oluwatobi"
+console.log(otherInfo); // ["Sofela", "codesweetly.com"]
+
+=> CONFIG DRIVEN UI: Our website is driven by data. The data can be different based on location and other factors.
+The data received by api is the config.
+
+=> The data that we need to display on our website or the data that drives the logic of our website comes from the backend in the form of json 
+
+=> whenever you are looping through an array using map to pass each array element dynamically to a component and render each element, 
+you should give a key to each element that uniquely identifies it. This unique key is useful when you want to update or delete a particular element that is rendered
+separately via a component
+
+=> Never use index as the key. A key is the only thing React uses to identify DOM elements. What happens if you push an item to the list or remove something in the 
+middle? If the key is same as before, React assumes that the DOM element represents the same component as before. But that is no longer true.
+
+stack overflow ans: 
+If we are not adding /removing items from list then it is fine to use index as keys else it will be good to use some id which uniquely identifies the item. 
+Reason is if you add or remove some items from the list, indexes change for older items and react can get confused which items are changed. 
+
+React docs:
+What is the Virtual DOM?
+The virtual DOM (VDOM) is a programming concept where an ideal, or “virtual”, representation of a UI is kept in memory and synced with the “real” DOM by a library
+ such as ReactDOM. This process is called reconciliation.
+
+This approach enables the declarative API of React: You tell React what state you want the UI to be in, and it makes sure the DOM matches that state. This abstracts 
+out the attribute manipulation, event handling, and manual DOM updating that you would otherwise have to use to build your app.
+
+Since “virtual DOM” is more of a pattern than a specific technology, people sometimes say it to mean different things. In React world, the term “virtual DOM” is usually
+associated with React elements since they are the objects representing the user interface. React, however, also uses internal objects called “fibers” to hold additional
+information about the component tree. They may also be considered a part of “virtual DOM” implementation in React.
+
+
+
+
+
+
+
+EPISODE 5: Let's Get Hooked (30 Sep 1 pm)
+
+=> Best practice is to make separate files for separate components.
+
+=> Don't keep hard coded data inside component file.
+
+=> constant.js / config.js / utils.js => files in which hard coded data is kept
+
+=> Name all constant data variables in uppercase and snake case: eg. CONSTANT_VARIABLE
+
+=> Two types of export & import:
+      1. default: When exporting a single thing
+           export default Component;
+           import Component from "path/Component";
+      2. named: When exporting multiple things
+           export const var1;
+           export const var2;
+           import { var1, var2} from "path/file";
+    It's important to note that a file can have both named and default exports together. This means you can export one main thing using 
+    export default, while also exporting multiple additional values using export.
+
+=> *******React is FAST because it can do faster dom manipulations with the help of virtual dom***********
+
+******************REACT HOOKS***************
+=> Hooks are normal js UTILITY functions
+=> To use them we have to 1st import them
+=> 2 important hooks: 
+
+useState(): generates superpowerful state variables which keep the ui layer in sync with data layer.
+Whenever a state variable updates, React re-renders the component
+how to import :- import { useState } from "react";
+State variables maintain state of a component.
+useState() returns an array of 2 elements. 1st is state variable. Another is a function to set the state variable.
+We use array destructuring to extract out these 2 elements: 
+const [state, setState] = useState( initial_state );
+console.log(useState()) returns [undefined, ƒ]
+
+use Effect()
+how to import :- import { useEffect } from "react";
+
+REACT USES RECONCILIATION ALGORITHM WHICH IS ALSO KNOWN AS REACT FIBRE.
+
+VIRTUAL DOM IS A REPRESENTATION OF ACTUAL DOM.
+
+When you console log a component, it logs an object containing React Elements. This js object is the Virtual DOM.
+
+DIFF ALGORITHM FINDS OUT THE DIFFERENCE BETWEEN UPDATED VIRTUAL DOM AND PREVIOUS VIRTUAL DOM. AFTER FIGURING OUT THE DIFFERENCE, 
+IT WILL UPDATE THE ACTUAL DOM ON EVERY RENDER CYCLE.
+
+REACT FIBER IS A NEW WAY OF FINDING THE DIFF AND UPDATING THE DOM. REACT FIBER WAS INTRODUCED IN REACT16.
+
+FINDING DIFF BETWEEN TWO OBJECTS IS SIMPLER THAN FINDING DIFF BETWEEN TWO HTML DOCUMENTS.
+HENCE FINDING DIFF BETWEEN PREVIOUS AND UPDATED VIRTUAL DOMS IS EASIER THAN FINDING DIFF BETWEEN TWO ACTUAL DOMS.
+WHENEVER THERE IS ANY CHANGE IN STATE VARIABLE, VIRTUAL DOM IS UPDATED, DIFF BETWEEN PREVIOUS AND UPDATED VIRTUAL DOMS IS CALCULATED, 
+ACTUAL DOM IS UPDATED AND RE-RENDERING HAPPENS.
+
+The “reconciliation” algorithm in React is how the decision to re-render the component is made. In the browser, DOM manipulation is expensive
+ and time consuming, both in mounting and unmounting. Part of what makes React very performant is its reconciliation algorithm.
+
+In short, it watches closely for differences, and only updates the DOM when necessary and tries to update only the parts which need to be
+ changed.
+
+The Virtual DOM is a theoretical DOM tree generated by React when a change is made to a component’s state. This is modeled after the state
+ of your application upon modification of the state, for example, after calling this.setState(). React uses what is called a “snapshot” to
+  make this comparison and analysis between the DOM before the update, and the DOM after. This is the point in time when React utilizes
+   its reconciliation algorithm.
+
+Updating the Virtual DOM is much faster than the real DOM, since the browser doesn’t need to show a visualization of it.
+
+How updates are determined
+
+The reconciliation algorithm is run whenever the component level state is updated. It analyzes the current DOM with the Virtual DOM,
+ in order to determine which changes need to be made to the real DOM. After this step, it has determined which DOM nodes on your application
+  require updates, and it calls the render method.
+  
+
+
+
+
+
+
+EPISODE 6 - EXPLORING THE WORLD (1 OCTOBER)
+
+Monolith Architecture: When web apps were developed traditionally, monolith Architecturewas used. So we had Authentication, APIs,
+ Database connectivity, UI, SMS Notifications...all inside one big project. So here even if we had to change a small thing, 
+ say change the color of a button, the project had to be compiled, built and deployed all over again.
+
+Microservice Architecture: In today's world, modern software is built using Microservice Architecture. Here we have separate services built for 
+accomplishing different features. This microservices when combined together forms a big app. This is known as SEPARATION OF CONCERNS.
+Also known as SINGLE RESPONSIBILITY PRINCIPLE.
+
+How do these separate micro services built with different tack stacks, running on different ports interact with each other to make the
+ whole application work?
+- UI needs to talk to backend. Backend needs to talk to database, auth, Notifications service.
+The React project that we are building is a ui mocroservice for example.
+Since the services run on different ports, these ports are mapped to different url (path). Calls are made to different urls to make 
+them interact with each other.
+
+Two approaches on how ui app fetches data from backend or makes api calls:
+1. when page loads => api call (screen is blank and frozen at this time) => when data fetched, render the ui along with data fetched on screen
+2. when page loads => quickly render the ui => make api call => when data fetched, re-render ui and populate it with the data fetched from api
+In React, we will always use the 2nd approach because it provides better UX
+
+When monoliths grow too big it may be time to transition to microservices. A monolithic application is built as a single unified unit 
+while a microservices architecture is a collection of smaller, independently deployable services. 
+
+A monolithic architecture is a traditional model of a software program, which is built as a unified unit that is self-contained and independent
+ from other applications. A monolithic architecture is a singular, large computing network with one code base that couples all of the
+   business concerns together.  To make a change to this sort of application requires updating the entire stack by accessing the code base and
+    building and deploying an updated version of the service-side interface. This makes updates restrictive and time-consuming. 
+
+Monoliths can be convenient early on in a project's life for ease of code management, cognitive overhead, and deployment. This allows everything
+ in the monolith to be released at once.
+
+ A microservices architecture, also simply known as microservices, is an architectural method that relies on a series of independently 
+ deployable services. These services have their own business logic and database with a specific goal. Updating, testing, deployment, 
+ and scaling occur within each service. Microservices decouple major business, domain-specific concerns into separate, independent
+  code bases. Microservices don’t reduce complexity, but they make any complexity visible and more manageable by separating tasks
+   into smaller processes that function independently of each other and contribute to the overall whole.
+
+******USE EFFECT HOOK******
+SYNTAX: useEffect(arg1, arg2) -> useEffect(callback function, array of dependencies) -> useEffect(() => {}, [])
+This callback function that we pass to useEffect will be called right after the component renders.
+
+making api call: making api call to swiggy's api from our project hosted on localhost will be blocked by CORS policy
+CORS Policy: any requests made to different domains from a client are first verified by the server and then making of api call is allowed
+There is a chrome extension that allows you to bypass CORS restrictions: Allow CORS
+
+=> Instead of showing a spinner while the api data loads, we use Shimmer UI. A simple spinner doesn't tell the user what kind of content 
+is being loaded, how long it will take, or what to expect next.
+A better way to show loading states is to use a shimmer UI. A shimmer UI is a version of the UI that doesn’t contain actual content, 
+but instead mimics the layout and shapes of the content that will eventually appear. It uses a gradient animation that creates a 
+shimmering effect over the placeholders, giving the user a sense of motion and progress.
+
+While the data is being loaded from the api, we render shimmer UI on the screen for that while.
+App loads => quickly render the shimmer UI => make api call => when data is loaded, re-render the page which is populated with actual data
+
+=> Why do we need state variables?
+Because there's no way to track changes in normal js variables.
+
+When state of a state variable changes, the component is re-rendered but only the part that is changed is updated in the DOM
+
+
+
+
+
+
+
+EPISODE 7: FINDING THE PATH (3 Oct, 8:30 a.m.)
+
+Diving deeper into useEffect Hook: 
+Callback function inside useEffect is called after every render of the component it is present in. But the array of dependencies, which is the 2nd
+argument to useEffect, changes the behaviour of render. If there's no dependency array, it will be called every time the component re-renders.
+But if there's an empty dependency array present, useEffect is called only on first render of the component (just once). 
+But if there's something in the dependency array, useEffect is called only when the dependency changes. 
+
+=> NEVER USE useState OUTSIDE OF YOUR COMPONENT. It makes no sense and throws error.
+useState has its purpose: creating local state variables inside a component. 
+
+=> ALWAYS USE useState AT THE TOP OF THE COMPONENT.
+The code runs line by line. So this is a good practice.
+
+=> NEVER CREATE STATE VARIABLE INSIDE IF-ELSE, FOR LOOP, FUNCTIONS. THIS CAN CREATE INCONSISTENCIES.
+
+React Routing - Creating different URL Routes and Pages inside React App
+For this, we use a npm library, react-router-dom.
+Then we import { createBrowserRouter } from react-router-dom; And this will help us create our routing configuration.
+const appRouter = createBrowserRouter();
+Here we are creating routing configuration inside appRouter and we pass it to createBrowserRouter().
+createBrowserRouter() takes a list of paths. Array of objects containing paths and the element(component) that should be loaded corresponding 
+to that path.
+After creating configuration, we need to provide it to our app.
+<RouterProvider /> component, that is imported from react-router-dom, will provide the routing configuration to our React App.
+We render this component inside our root div now.
+
+rafce = shortcut in vscode to automatically create a component with the file name 
+
+react-router-dom gives access to an important hook: useRouteError which gives you additional info about the error like status, statusText
+
+children routes: specifying paths nested inside a main component. Pushing children components inside main component according to route.
+
+When a component has 3 children, and they are to be shown on the screen according to the path specified in url,
+react-router-dom gives a component called <Outlet /> which allows you to substitute components inside another component according to the 
+path, automatically.
+
+When using React, never use anchor tag <a></a> for routing because in this case a whole new page is loaded.
+ We wanna use React routing so that we can navigate to a different route without reloading the page.
+ We can achieve this using <Link to="" /> component provided by react-router-dom. Behind the scenes, Link uses anchor tag. And anchor tag is 
+ shown in the place of Link when seen in the dev elements console.
+ This is why React Applications are known as Single Page Applications.
+
+ There are two types of Routing that can be used in a React application:
+ 1. Client Side Routing - Creates Single Page Applications. Just one page in which components are interchanged while navigating to other routes.
+ No network calls being made. Page is not getting reloaded while navigating to other routes.
+ 2. Server Side Routing - Network calls are being made when a page on a different route is requested.
+  Page is getting reloaded while navigating to other routes.
+
+DYNAMIC ROUTING: using /:id and useParams from react-router-dom
+
+
+
+
+
+
+
+
+
+EPISODE 8 - LET'S GET CLASSY (4 Oct, 11am)
+Class based components - Older way of creating components in react. But they are VERY IMPORTANT to know. Asked a lot in interviews. 
+You'll get to know how painful it was to do things using class based components and how convenient it is to use functional
+components.
+Class based Components are normal javaScript classes.
+Loading a functional component means calling a function
+Loading a class based component means creating an instance of a class
+When creating an instance of a class, the constructor function is called. Constructor function is the best place to receive props and
+ create state variables.
+ Life cycle of class based components? How class based components are mounted on the webpage? 
+ When a class component is loaded, a new instance of the class is created
+ First constructor is called, and then render() is called
+ once the class component is mounted and its there in the dom, then the componentDidMount() will be called
+Life cycle of class based components:
+1. constructor called (once class instantiated)
+2. render called (once jsx rendered)
+3. componentDidMount called (once class comp is mounted on dom)
+in case of child class comp nested inside parent class comp:
+parents constructor called, parents render called, inside render, child comp found, child comp's lifecycle methods are triggered,
+ so childs constructor called, child's render called, childs componentDidMount called, THEN parents componentDidMount called
+ Console log statements:
+ parent constructor
+ parent render
+ child constructor
+ child render
+ child comp did mount
+ parent comp did mount
+ this.state is an object which is used to create state variables (useState hook use case)
+ this.setState is a function which takes an object inside which state variables are updated (setState function provided by useState hook use case)
+ componentDidMount is used to make api calls once the page is rendered (useEffect hook use case)
+ why api calls are made inside componentDidMount?
+ - so that component renders first, then componentDidMount is called inside which api call is made
+
+ When there are multiple children class components, what is the order of triggering of lifecycle methods?
+
+ {parent constructor
+ parent render
+ child1 constructor
+ child1 render
+ child2 constructor
+ child2 render} //render phase
+
+ {child1 componentDidMount
+ child2 componentDidMount
+ parent componentDidMount} //commit phase
+
+ We can understand this via react lifecycle diagram: https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/
+ In react, components are mounted in 2 phases:
+ 1. render phase => constructor, render
+ 2. commit phase => dom updates, componentDidMount
+ In mounting phase: 1st cons => render => dom updated => componentDidMount
+ **RENDER PHASE FOR PARENT AND CHILD CLASS COMPONENTS ARE BATCHED TOGETHER
+ **COMMIT PHASE FOR PARENT AND CHILD CLASS COMPONENTS ARE BATCHED TOGETHER
+ **WHY REACT DOES THIS?
+ - Once the commit phase starts react tries to update the dom, 
+   and dom manipulation is the most expensive operation. So react batches the render phase
+   and here it just deals with virtual dom and not the real dom so this a less expensive operation.
+**RENDER PHASE IS FAST
+**COMMIT PHASE TAKES TIME
+THIS OPTIMISES THE REACT APP.
+
+component loaded => constructor called => state variables created with initial, default values using this.state =>
+ render called => render happens with default values of state variables and react updates the dom with dummy data
+  (initial data set for variables before api call is fulfilled) => componentDidMount called after render finishes 
+  => api call made => state variables updated with api data using this.setState
+
+
+**mounting cycle finishes when component is rendered quickly with dummy data, once
+**updating happens when setState updates state variables
+** when state var updated, render is triggered once again
+**constructor is called just once, but render is triggered again and again when state variables change
+**in the updating phase, react will now update the real dom with changed state variables by calculating the diff
+**Now componentDidUpdate will be called
+**when component removed from dom(when we go to some other route and some other component is mounted), componentWillUnmount called
+
+REACT LIFECYCLE METHODS
+----MOUNTING-----
+constructor(dummy)
+render(dummy)
+<HTML (dummy)>
+componentDidMount
+api callthis.setState
+
+----UPDATING----
+render(api data)
+<HTML (api data)>
+componentDidUpdate
+
+----UNMOUNTING----
+componentWillUnmount
+
+
+
+
+
+
+
+
+EPISODE 9 - OPTIMISING OUR APP (6 OCT 10AM)
+Single Responsibility Principle - 
+A function/class/component or basically any entity in the code should have a single responsibility.
+Making you code modular makes it reusable, maintainable and testable.
+
+CUSTOM HOOKS - Special js utility functions
+Custom hooks are not mandatory to create but they make our code more reusable, maintainable and readable
+We keep our ciustom hooks files inside utils folder because they are just helper functions that we need inside our components
+custom hooks files are named starting with "use" so that React recognizzes them as hooks.
+
+We can attach an event listener for an event called "online" to the window object to show a network error or online/offline status on the page 
+
+HOW TO OPTIMISE LARGE SCALE Applications?
+- A bundler like Parcel bundles all your files into a single file
+ One js file is created which is minified. It contains code of all components.
+ Is this good or bad?
+ The size of js file increases a lot. How to optimise this?
+
+ - We want to make smaller bundles of files instead of bundling everything into ONE BUNDLE.
+ This process known as Chunking/Code Splitting/Dynamic Bundling/Lazy Loading/On-demand Loading/Dynamic Import
+How and when to make smaller bundles?
+I want logical separation of bundles.
+A bundle should have enough code to make a single feature work
+For a lesser used feature on our app, we can use lazy loading to load the code for that feature.
+If inside swiggy, apart from delivering food, we also have less common feature of delivering groceries,
+ we build a separate component <Grocery /> for that
+Then Dont import Grocery like this inside app.js: import Grocery from "./components/Grocery";
+import {lazy} from "react";
+lazy lets you defer loading component's code until it has been rendered for the first time
+eg. const Grocery = lazy(() => import("./components/Grocery"));
+This way, our js bundle has been separated into main bundle and grocery bundle
+
+When Grocery link is clicked, the grocery bundle is loaded but the grocery page is not loaded.
+It is because it took some time, say 10ms to load the grocery bundle
+but by that time, even before 10ms, react tries to render the grocery component.
+This error can be handled by using <Suspense/> component.
+import {lazy, Suspense} from "react";
+Where paths are specified, wrap the grocery component inside suspense component
+{
+  path: "/grocery",
+  element: <Suspense fallback={<h1>Loading...</h1>}><Grocery /></Suspense>,
+}
+fallback provides a loading screen for when the lazy component hasnt been rendered, pass jsx/shimmer ui
+To see that loading screen for some time, you can switch to slow 3G via network tab of dev tools
+
+
+
+
+
+
+
+
+
+
+
+
+
+EPISODE 10 - JO DIKHTA HAI, VO BIKTA HAI (6 OCT, 4:30PM)
+Ways to add styling to our app:
+
+1. SASS - Sass stands for Syntactically Awesome Stylesheet
+Sass is an extension to CSS
+Sass is a CSS pre-processor
+Sass is completely compatible with all versions of CSS
+Sass reduces repetition of CSS and therefore saves time
+A browser does not understand Sass code. Therefore, you will need a Sass pre-processor to convert Sass code into standard CSS.
+This process is called transpiling. So, you need to give a transpiler (some kind of program) some Sass code and then get some CSS code back.
+SCSS - SCSS is simply one of the two syntaxes available for the CSS preprocessor Sass. Like any preprocessor, Sass works by being compiled into 
+native CSS code that will work across any browser
+
+SASS/SCSS are not used in big, production ready applications. They don't scale well.
+
+2. Styled Components - Styled-components is a library that allows you to write CSS in JS while building custom components in Reactjs.  
+
+3. Material UI - Material UI is a library of React UI components that implements Google's Material Design.
+
+4. Bootstrap - Bootstrap is a free and open-source CSS framework directed at responsive, mobile-first front-end web development.
+ It contains HTML, CSS and JavaScript-based design templates for typography, forms, buttons, navigation, and other interface components.
+ Bootstrap utilizes Sass for a modular and customizable architecture.
+
+There are more like Chakra UI, Ant Design, etc.
+
+TAILWIND CSS - Tailwind CSS is an open source CSS framework. The main feature of this library is that, 
+unlike other CSS frameworks like Bootstrap, it does not provide a series of predefined classes for elements such as buttons or tables.
+ Instead, it creates a list of "utility" CSS classes that can be used to style each element by mixing and matching.
+ Tailwind automatically removes all unused CSS when building for production, which means your final CSS bundle is the smallest 
+ it could possibly be. In fact, most Tailwind projects ship less than 10kB of CSS to the client.
